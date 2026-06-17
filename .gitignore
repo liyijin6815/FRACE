@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data files (private)
+*.jsonl
+data/*.json
+!direct_finetuning/dataset_info.json
+!kg_enhanced_finetuning/kg_rag/clinical_kg.json
+
+# Model weights (large files tracked by Git LFS)
+predictions/
+results/
+*.bin
+*.pt
+*.ckpt
+
+# Logs
+*.log
+wandb/
+runs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary configs
+tmp_*.yaml

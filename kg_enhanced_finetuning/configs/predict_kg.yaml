@@ -1,0 +1,42 @@
+### ===== Model =====
+model_name_or_path: /path/to/DeepSeek-R1-0528-Qwen3-8B
+adapter_name_or_path: ./saves/fetal_mri_plus_kg_lora
+trust_remote_code: true
+flash_attn: auto
+
+### ===== Task: Predict Only =====
+stage: sft
+do_train: false
+do_eval: false
+do_predict: true
+finetuning_type: lora
+template: deepseekr1
+
+### ===== Thinking Chain =====
+enable_thinking: false
+
+### ===== Dataset =====
+dataset_dir: ./data
+# Options: InDistribution_test, OutofDistribution_center1_normal,
+#          OutofDistribution_center1_patients, OutofDistribution_center2_normal,
+#          OutofDistribution_center2_patients
+eval_dataset: InDistribution_test
+cutoff_len: 2048
+overwrite_cache: true
+preprocessing_num_workers: 16
+dataloader_num_workers: 4
+
+### ===== Generation Parameters =====
+predict_with_generate: true
+per_device_eval_batch_size: 1
+ddp_timeout: 180000000
+bf16: true
+
+temperature: 0.2
+top_p: 0.2
+max_new_tokens: 4096
+
+### ===== Output =====
+output_dir: ./predictions/InDistribution_test
+overwrite_output_dir: true
+report_to: none

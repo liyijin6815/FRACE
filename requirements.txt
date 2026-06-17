@@ -1,0 +1,16 @@
+torch>=2.1.0
+transformers>=4.43.0
+peft>=0.12.0
+datasets>=2.16.0
+accelerate>=0.30.0
+trl>=0.9.0
+sentencepiece
+protobuf
+jieba
+rouge-chinese
+bert-score
+sentence-transformers
+pandas
+numpy
+openai
+requests
