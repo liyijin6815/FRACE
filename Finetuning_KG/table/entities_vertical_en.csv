@@ -1,0 +1,218 @@
+﻿Attribute,Value
+Entity Name,Prenatal MRI Exam
+Type,Exam
+Aliases,Prenatal MRI; Fetal MRI Exam; Fetal Magnetic Resonance
+Note,Root node representing a prenatal MRI examination scenario
+,
+Entity Name,Fetal Brain
+Type,AnatomyDomain
+Aliases,Fetal Brain; Fetal Cranium
+Note,Fetal anatomical domain
+,
+Entity Name,Maternal Birth Canal
+Type,AnatomyDomain
+Aliases,Maternal Birth Canal; Birth Canal
+Note,"Maternal anatomical domain, currently containing only cervical canal"
+,
+Entity Name,Brain Parenchyma
+Type,Anatomy
+Aliases,Brain Parenchyma; White Matter
+,
+Entity Name,Cavum Septum Pellucidum
+Type,Anatomy
+Aliases,Cavum Septum Pellucidum; CSP
+,
+Entity Name,Cerebellar Vermis
+Type,Anatomy
+Aliases,Cerebellar Vermis; Vermis
+,
+Entity Name,Cerebellum
+Type,Anatomy
+Aliases,Cerebellum
+,
+Entity Name,Cerebral Cortex
+Type,Anatomy
+Aliases,Cerebral Cortex; Brain Cortex
+,
+Entity Name,Cervical Canal
+Type,Anatomy
+Aliases,Cervical Canal; Cervix
+,
+Entity Name,Choroid Plexus
+Type,Anatomy
+Aliases,Choroid Plexus
+,
+Entity Name,Cisterna Magna
+Type,Anatomy
+Aliases,Cisterna Magna; Posterior Fossa Cistern
+,
+Entity Name,Corpus Callosum
+Type,Anatomy
+Aliases,Corpus Callosum
+,
+Entity Name,Lateral Ventricle
+Type,Anatomy
+Aliases,Lateral Ventricle
+,
+Entity Name,Posterior Fossa
+Type,Anatomy
+Aliases,Posterior Fossa; Posterior Cranial Fossa
+,
+Entity Name,Subarachnoid Space
+Type,Anatomy
+Aliases,Subarachnoid Space
+,
+Entity Name,Subependymal Zone
+Type,Anatomy
+Aliases,Subependymal Zone; Germinal Matrix
+,
+Entity Name,Atrial Width
+Type,Measurement
+Aliases,Atrial Width; Ventricular Atrium; Posterior Horn
+Unit,cm
+Has Side,True
+Template,"{side}{name} width ~{value}cm, exceeds normal upper limit {normal_max}cm, consider {label}"
+,
+Entity Name,CM Depth
+Type,Measurement
+Aliases,CM Depth
+Unit,cm
+Has Side,False
+Template,"{name} depth ~{value}cm, exceeds normal upper limit {normal_max}cm, consider {label}"
+,
+Entity Name,CSP Width
+Type,Measurement
+Aliases,CSP Width
+Unit,cm
+Has Side,False
+Template,"{name} width ~{value}cm, exceeds normal upper limit {normal_max}cm, consider {label}"
+,
+Entity Name,Cerebellar Diameter
+Type,Measurement
+Aliases,Cerebellar Diameter; Cerebellar Width
+Unit,cm
+Has Side,False
+Note,"Requires gestational age assessment, placeholder"
+,
+Entity Name,Cervical Length
+Type,Measurement
+Aliases,Cervical Length; Cervix Length
+Unit,cm
+Has Side,False
+Template,"{name} length ~{value}cm, below normal reference minimum {normal_min}cm, consider {label}"
+,
+Entity Name,Threshold_1.0cm
+Type,Threshold
+Unit,cm
+Value,1.0
+Label,1.0cm
+,
+Entity Name,Threshold_2.5cm
+Type,Threshold
+Unit,cm
+Value,2.5
+Label,2.5cm
+,
+Entity Name,Mild Dilatation
+Type,Severity
+Label,Mild Dilatation
+Range,1.0–1.2cm
+,
+Entity Name,Moderate Dilatation
+Type,Severity
+Label,Moderate Dilatation
+Range,1.2–1.5cm
+,
+Entity Name,Severe Dilatation
+Type,Severity
+Label,Severe Dilatation
+Range,≥1.5cm
+,
+Entity Name,Shortened
+Type,Severity
+Label,Shortened
+,
+Entity Name,Widened
+Type,Severity
+Label,Widened
+,
+Entity Name,Arachnoid Cyst
+Type,Finding
+Aliases,Arachnoid Cyst; Subarachnoid Cyst
+,
+Entity Name,CC Agenesis
+Type,Finding
+Aliases,Corpus Callosum Agenesis; CC Hypoplasia; CC Absence
+,
+Entity Name,Cerebellar Vermis Hypoplasia
+Type,Finding
+Aliases,Vermis Hypoplasia; Vermis Agenesis; Vermis Underdevelopment
+,
+Entity Name,Choroid Plexus Cyst
+Type,Finding
+Aliases,Choroid Plexus Cyst; CP Cyst
+,
+Entity Name,Dandy-Walker Malformation
+Type,Finding
+Aliases,Dandy-Walker; Posterior Fossa Cyst
+,
+Entity Name,Heterotopia
+Type,Finding
+Aliases,Heterotopia; Gray Matter Heterotopia
+,
+Entity Name,Hydrocephalus
+Type,Finding
+Aliases,Hydrocephalus; Obstructive Hydrocephalus; Communicating Hydrocephalus
+,
+Entity Name,Parenchymal Signal Abnormality
+Type,Finding
+Aliases,Parenchymal Signal Abnormality; White Matter Signal Abnormality
+,
+Entity Name,Schizencephaly
+Type,Finding
+Aliases,Schizencephaly; Cleft Brain
+,
+Entity Name,Subependymal Cyst
+Type,Finding
+Aliases,Subependymal Cyst; Germinal Matrix Cyst
+,
+Entity Name,Interpretation_Arachnoid Cyst
+Type,Interpretation
+Text,"Suggestive of arachnoid cyst, require follow-up observation"
+,
+Entity Name,Interpretation_CC Anomaly
+Type,Interpretation
+Text,"Suggestive of corpus callosum developmental anomaly, require sagittal view to assess for associated lipoma or cyst"
+,
+Entity Name,Interpretation_CP Cyst
+Type,Interpretation
+Text,"Suggestive of choroid plexus cyst, often transient, recommend follow-up"
+,
+Entity Name,Interpretation_Cortical Anomaly
+Type,Interpretation
+Text,Suggestive of cortical developmental anomaly
+,
+Entity Name,Interpretation_Dandy-Walker
+Type,Interpretation
+Text,"Suggestive of Dandy-Walker malformation or variant, require comprehensive assessment with cerebellar vermis morphology"
+,
+Entity Name,Interpretation_Hydrocephalus
+Type,Interpretation
+Text,"Suggestive of hydrocephalus, require investigation for aqueductal stenosis, germinal matrix hemorrhage, or spinal dysraphism"
+,
+Entity Name,Interpretation_Neuronal Migration
+Type,Interpretation
+Text,Suggestive of neuronal migration disorder
+,
+Entity Name,Interpretation_Parenchymal Lesion
+Type,Interpretation
+Text,"Suggestive of parenchymal lesion, require clinical correlation to exclude intrauterine infection or hypoxia-ischemia"
+,
+Entity Name,Interpretation_Subependymal Cyst
+Type,Interpretation
+Text,"Suggestive of subependymal cyst, require investigation for germinal matrix hemorrhage"
+,
+Entity Name,Interpretation_Vermis Anomaly
+Type,Interpretation
+Text,"Suggestive of cerebellar vermis developmental anomaly, require prenatal diagnosis to exclude Dandy-Walker malformation or variant"
+,

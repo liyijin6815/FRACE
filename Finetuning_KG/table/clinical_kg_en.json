@@ -1,0 +1,312 @@
+{
+    "_meta": {
+      "description": "Prenatal MRI Clinical Knowledge Graph V3 — Exam-rooted, distinguishing fetal brain and maternal structures",
+      "version": "3.0",
+      "node_types": [
+        "Exam",
+        "AnatomyDomain",
+        "Anatomy",
+        "Measurement",
+        "Threshold",
+        "Severity",
+        "Finding",
+        "Interpretation"
+      ],
+      "relation_types": [
+        "covers",
+        "part_of",
+        "measures",
+        "has_normal_max",
+        "has_normal_min",
+        "has_severity_level",
+        "located_in",
+        "indicates",
+        "associated_with"
+      ]
+    },
+
+    "entities": {
+
+      "Prenatal MRI Exam": {
+        "type": "Exam",
+        "aliases": ["Prenatal MRI", "Fetal MRI Exam", "Fetal Magnetic Resonance"],
+        "note": "Root node representing a prenatal MRI examination scenario"
+      },
+
+      "Fetal Brain": {
+        "type": "AnatomyDomain",
+        "aliases": ["Fetal Brain", "Fetal Cranium"],
+        "note": "Fetal anatomical domain"
+      },
+      "Maternal Birth Canal": {
+        "type": "AnatomyDomain",
+        "aliases": ["Maternal Birth Canal", "Birth Canal"],
+        "note": "Maternal anatomical domain, currently containing only cervical canal"
+      },
+
+      "Lateral Ventricle": {
+        "type": "Anatomy",
+        "aliases": ["Lateral Ventricle"]
+      },
+      "Cavum Septum Pellucidum": {
+        "type": "Anatomy",
+        "aliases": ["Cavum Septum Pellucidum", "CSP"]
+      },
+      "Posterior Fossa": {
+        "type": "Anatomy",
+        "aliases": ["Posterior Fossa", "Posterior Cranial Fossa"]
+      },
+      "Cisterna Magna": {
+        "type": "Anatomy",
+        "aliases": ["Cisterna Magna", "Posterior Fossa Cistern"]
+      },
+      "Corpus Callosum": {
+        "type": "Anatomy",
+        "aliases": ["Corpus Callosum"]
+      },
+      "Cerebellum": {
+        "type": "Anatomy",
+        "aliases": ["Cerebellum"]
+      },
+      "Cerebellar Vermis": {
+        "type": "Anatomy",
+        "aliases": ["Cerebellar Vermis", "Vermis"]
+      },
+      "Choroid Plexus": {
+        "type": "Anatomy",
+        "aliases": ["Choroid Plexus"]
+      },
+      "Subependymal Zone": {
+        "type": "Anatomy",
+        "aliases": ["Subependymal Zone", "Germinal Matrix"]
+      },
+      "Brain Parenchyma": {
+        "type": "Anatomy",
+        "aliases": ["Brain Parenchyma", "White Matter"]
+      },
+      "Cerebral Cortex": {
+        "type": "Anatomy",
+        "aliases": ["Cerebral Cortex", "Brain Cortex"]
+      },
+      "Subarachnoid Space": {
+        "type": "Anatomy",
+        "aliases": ["Subarachnoid Space"]
+      },
+      "Cervical Canal": {
+        "type": "Anatomy",
+        "aliases": ["Cervical Canal", "Cervix"]
+      },
+
+      "Atrial Width": {
+        "type": "Measurement",
+        "aliases": ["Atrial Width", "Ventricular Atrium", "Posterior Horn"],
+        "unit": "cm",
+        "has_side": true,
+        "template": "{side}{name} width ~{value}cm, exceeds normal upper limit {normal_max}cm, consider {label}"
+      },
+      "CSP Width": {
+        "type": "Measurement",
+        "aliases": ["CSP Width"],
+        "unit": "cm",
+        "has_side": false,
+        "template": "{name} width ~{value}cm, exceeds normal upper limit {normal_max}cm, consider {label}"
+      },
+      "CM Depth": {
+        "type": "Measurement",
+        "aliases": ["CM Depth"],
+        "unit": "cm",
+        "has_side": false,
+        "template": "{name} depth ~{value}cm, exceeds normal upper limit {normal_max}cm, consider {label}"
+      },
+      "Cervical Length": {
+        "type": "Measurement",
+        "aliases": ["Cervical Length", "Cervix Length"],
+        "unit": "cm",
+        "has_side": false,
+        "template": "{name} length ~{value}cm, below normal reference minimum {normal_min}cm, consider {label}"
+      },
+      "Cerebellar Diameter": {
+        "type": "Measurement",
+        "aliases": ["Cerebellar Diameter", "Cerebellar Width"],
+        "unit": "cm",
+        "has_side": false,
+        "note": "Requires gestational age assessment, placeholder",
+        "template": ""
+      },
+
+      "Threshold_1.0cm": {
+        "type": "Threshold",
+        "value": 1.0,
+        "unit": "cm",
+        "label": "1.0cm"
+      },
+      "Threshold_2.5cm": {
+        "type": "Threshold",
+        "value": 2.5,
+        "unit": "cm",
+        "label": "2.5cm"
+      },
+
+      "Mild Dilatation": { "type": "Severity", "label": "Mild Dilatation", "range": "1.0–1.2cm" },
+      "Moderate Dilatation": { "type": "Severity", "label": "Moderate Dilatation", "range": "1.2–1.5cm" },
+      "Severe Dilatation": { "type": "Severity", "label": "Severe Dilatation", "range": "≥1.5cm" },
+      "Widened": { "type": "Severity", "label": "Widened" },
+      "Shortened": { "type": "Severity", "label": "Shortened" },
+
+      "CC Agenesis": {
+        "type": "Finding",
+        "aliases": ["Corpus Callosum Agenesis", "CC Hypoplasia", "CC Absence"]
+      },
+      "Cerebellar Vermis Hypoplasia": {
+        "type": "Finding",
+        "aliases": ["Vermis Hypoplasia", "Vermis Agenesis", "Vermis Underdevelopment"]
+      },
+      "Arachnoid Cyst": {
+        "type": "Finding",
+        "aliases": ["Arachnoid Cyst", "Subarachnoid Cyst"]
+      },
+      "Schizencephaly": {
+        "type": "Finding",
+        "aliases": ["Schizencephaly", "Cleft Brain"]
+      },
+      "Heterotopia": {
+        "type": "Finding",
+        "aliases": ["Heterotopia", "Gray Matter Heterotopia"]
+      },
+      "Parenchymal Signal Abnormality": {
+        "type": "Finding",
+        "aliases": ["Parenchymal Signal Abnormality", "White Matter Signal Abnormality"]
+      },
+      "Hydrocephalus": {
+        "type": "Finding",
+        "aliases": ["Hydrocephalus", "Obstructive Hydrocephalus", "Communicating Hydrocephalus"]
+      },
+      "Dandy-Walker Malformation": {
+        "type": "Finding",
+        "aliases": ["Dandy-Walker", "Posterior Fossa Cyst"]
+      },
+      "Choroid Plexus Cyst": {
+        "type": "Finding",
+        "aliases": ["Choroid Plexus Cyst", "CP Cyst"]
+      },
+      "Subependymal Cyst": {
+        "type": "Finding",
+        "aliases": ["Subependymal Cyst", "Germinal Matrix Cyst"]
+      },
+
+      "Interpretation_CC Anomaly": {
+        "type": "Interpretation",
+        "text": "Suggestive of corpus callosum developmental anomaly, require sagittal view to assess for associated lipoma or cyst"
+      },
+      "Interpretation_Vermis Anomaly": {
+        "type": "Interpretation",
+        "text": "Suggestive of cerebellar vermis developmental anomaly, require prenatal diagnosis to exclude Dandy-Walker malformation or variant"
+      },
+      "Interpretation_Arachnoid Cyst": {
+        "type": "Interpretation",
+        "text": "Suggestive of arachnoid cyst, require follow-up observation"
+      },
+      "Interpretation_Cortical Anomaly": {
+        "type": "Interpretation",
+        "text": "Suggestive of cortical developmental anomaly"
+      },
+      "Interpretation_Neuronal Migration": {
+        "type": "Interpretation",
+        "text": "Suggestive of neuronal migration disorder"
+      },
+      "Interpretation_Parenchymal Lesion": {
+        "type": "Interpretation",
+        "text": "Suggestive of parenchymal lesion, require clinical correlation to exclude intrauterine infection or hypoxia-ischemia"
+      },
+      "Interpretation_Hydrocephalus": {
+        "type": "Interpretation",
+        "text": "Suggestive of hydrocephalus, require investigation for aqueductal stenosis, germinal matrix hemorrhage, or spinal dysraphism"
+      },
+      "Interpretation_Dandy-Walker": {
+        "type": "Interpretation",
+        "text": "Suggestive of Dandy-Walker malformation or variant, require comprehensive assessment with cerebellar vermis morphology"
+      },
+      "Interpretation_CP Cyst": {
+        "type": "Interpretation",
+        "text": "Suggestive of choroid plexus cyst, often transient, recommend follow-up"
+      },
+      "Interpretation_Subependymal Cyst": {
+        "type": "Interpretation",
+        "text": "Suggestive of subependymal cyst, require investigation for germinal matrix hemorrhage"
+      }
+    },
+
+    "triples": [
+
+      {"s": "Prenatal MRI Exam", "p": "covers", "o": "Fetal Brain", "note": "Fetal anatomical domain covered by this exam"},
+      {"s": "Prenatal MRI Exam", "p": "covers", "o": "Maternal Birth Canal", "note": "Maternal anatomical domain covered by this exam"},
+
+      {"s": "Lateral Ventricle", "p": "part_of", "o": "Fetal Brain"},
+      {"s": "Cavum Septum Pellucidum", "p": "part_of", "o": "Fetal Brain"},
+      {"s": "Posterior Fossa", "p": "part_of", "o": "Fetal Brain"},
+      {"s": "Corpus Callosum", "p": "part_of", "o": "Fetal Brain"},
+      {"s": "Brain Parenchyma", "p": "part_of", "o": "Fetal Brain"},
+      {"s": "Cerebral Cortex", "p": "part_of", "o": "Fetal Brain"},
+      {"s": "Subarachnoid Space", "p": "part_of", "o": "Fetal Brain"},
+
+      {"s": "Cisterna Magna", "p": "part_of", "o": "Posterior Fossa"},
+      {"s": "Cerebellum", "p": "part_of", "o": "Posterior Fossa"},
+      {"s": "Cerebellar Vermis", "p": "part_of", "o": "Cerebellum"},
+      {"s": "Choroid Plexus", "p": "part_of", "o": "Lateral Ventricle"},
+      {"s": "Subependymal Zone", "p": "part_of", "o": "Lateral Ventricle"},
+
+      {"s": "Cervical Canal", "p": "part_of", "o": "Maternal Birth Canal"},
+
+      {"s": "Atrial Width", "p": "measures", "o": "Lateral Ventricle"},
+      {"s": "CSP Width", "p": "measures", "o": "Cavum Septum Pellucidum"},
+      {"s": "CM Depth", "p": "measures", "o": "Cisterna Magna"},
+      {"s": "Cervical Length", "p": "measures", "o": "Cervical Canal"},
+      {"s": "Cerebellar Diameter", "p": "measures", "o": "Cerebellum"},
+
+      {"s": "Atrial Width", "p": "has_normal_max", "o": "Threshold_1.0cm"},
+      {"s": "CSP Width", "p": "has_normal_max", "o": "Threshold_1.0cm"},
+      {"s": "CM Depth", "p": "has_normal_max", "o": "Threshold_1.0cm"},
+      {"s": "Cervical Length", "p": "has_normal_min", "o": "Threshold_2.5cm"},
+
+      {"s": "Atrial Width", "p": "has_severity_level", "o": "Mild Dilatation", "meta": {"min": 1.0, "max": 1.2}},
+      {"s": "Atrial Width", "p": "has_severity_level", "o": "Moderate Dilatation", "meta": {"min": 1.2, "max": 1.5}},
+      {"s": "Atrial Width", "p": "has_severity_level", "o": "Severe Dilatation", "meta": {"min": 1.5, "max": 99.0}},
+      {"s": "CSP Width", "p": "has_severity_level", "o": "Widened", "meta": {"min": 1.0, "max": 99.0}},
+      {"s": "CM Depth", "p": "has_severity_level", "o": "Widened", "meta": {"min": 1.0, "max": 99.0}},
+      {"s": "Cervical Length", "p": "has_severity_level", "o": "Shortened", "meta": {"min": 0.0, "max": 2.5}},
+
+      {"s": "CC Agenesis", "p": "located_in", "o": "Corpus Callosum"},
+      {"s": "CC Agenesis", "p": "indicates", "o": "Interpretation_CC Anomaly"},
+
+      {"s": "Cerebellar Vermis Hypoplasia", "p": "located_in", "o": "Cerebellar Vermis"},
+      {"s": "Cerebellar Vermis Hypoplasia", "p": "indicates", "o": "Interpretation_Vermis Anomaly"},
+      {"s": "Cerebellar Vermis Hypoplasia", "p": "associated_with", "o": "Dandy-Walker Malformation"},
+
+      {"s": "Arachnoid Cyst", "p": "located_in", "o": "Subarachnoid Space"},
+      {"s": "Arachnoid Cyst", "p": "indicates", "o": "Interpretation_Arachnoid Cyst"},
+
+      {"s": "Schizencephaly", "p": "located_in", "o": "Cerebral Cortex"},
+      {"s": "Schizencephaly", "p": "indicates", "o": "Interpretation_Cortical Anomaly"},
+      {"s": "Schizencephaly", "p": "associated_with", "o": "Heterotopia"},
+
+      {"s": "Heterotopia", "p": "located_in", "o": "Cerebral Cortex"},
+      {"s": "Heterotopia", "p": "indicates", "o": "Interpretation_Neuronal Migration"},
+
+      {"s": "Parenchymal Signal Abnormality", "p": "located_in", "o": "Brain Parenchyma"},
+      {"s": "Parenchymal Signal Abnormality", "p": "indicates", "o": "Interpretation_Parenchymal Lesion"},
+
+      {"s": "Hydrocephalus", "p": "located_in", "o": "Lateral Ventricle"},
+      {"s": "Hydrocephalus", "p": "indicates", "o": "Interpretation_Hydrocephalus"},
+      {"s": "Hydrocephalus", "p": "associated_with", "o": "Atrial Width"},
+
+      {"s": "Dandy-Walker Malformation", "p": "located_in", "o": "Posterior Fossa"},
+      {"s": "Dandy-Walker Malformation", "p": "indicates", "o": "Interpretation_Dandy-Walker"},
+      {"s": "Dandy-Walker Malformation", "p": "associated_with", "o": "Cerebellar Vermis Hypoplasia"},
+
+      {"s": "Choroid Plexus Cyst", "p": "located_in", "o": "Choroid Plexus"},
+      {"s": "Choroid Plexus Cyst", "p": "indicates", "o": "Interpretation_CP Cyst"},
+
+      {"s": "Subependymal Cyst", "p": "located_in", "o": "Subependymal Zone"},
+      {"s": "Subependymal Cyst", "p": "indicates", "o": "Interpretation_Subependymal Cyst"}
+    ]
+  }

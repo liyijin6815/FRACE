@@ -1,0 +1,36 @@
+### Model and released adapter
+model_name_or_path: deepseek-ai/DeepSeek-R1-0528-Qwen3-8B
+adapter_name_or_path: ./adapter/fetal_mri_plus_kg_lora_v3
+trust_remote_code: true
+flash_attn: auto
+
+### Prediction task
+stage: sft
+do_train: false
+do_eval: false
+do_predict: true
+finetuning_type: lora
+template: deepseekr1
+enable_thinking: false
+
+### KG-augmented dataset
+dataset_dir: ./data
+eval_dataset: InDistribution_test
+cutoff_len: 2048
+overwrite_cache: true
+preprocessing_num_workers: 16
+dataloader_num_workers: 4
+
+### Generation
+predict_with_generate: true
+per_device_eval_batch_size: 1
+bf16: true
+temperature: 0.2
+top_p: 0.2
+max_new_tokens: 4096
+ddp_timeout: 180000000
+
+### Output
+output_dir: ./predictions/InDistribution_test
+overwrite_output_dir: true
+report_to: none

@@ -1,0 +1,312 @@
+{
+    "_meta": {
+      "description": "产前MRI临床知识图谱 V3 — 以检查场景为根，区分胎儿脑与母体结构",
+      "version": "3.0",
+      "node_types": [
+        "Exam",
+        "AnatomyDomain",
+        "Anatomy",
+        "Measurement",
+        "Threshold",
+        "Severity",
+        "Finding",
+        "Interpretation"
+      ],
+      "relation_types": [
+        "covers",
+        "part_of",
+        "measures",
+        "has_normal_max",
+        "has_normal_min",
+        "has_severity_level",
+        "located_in",
+        "indicates",
+        "associated_with"
+      ]
+    },
+  
+    "entities": {
+  
+      "产前MRI检查": {
+        "type": "Exam",
+        "aliases": ["产前MRI", "胎儿MRI检查", "胎儿磁共振"],
+        "note": "整个知识图谱的根节点，代表一次产前MRI检查场景"
+      },
+  
+      "胎儿脑": {
+        "type": "AnatomyDomain",
+        "aliases": ["胎儿脑", "胎脑", "颅脑", "胎儿颅脑"],
+        "note": "胎儿侧解剖域"
+      },
+      "母体产道": {
+        "type": "AnatomyDomain",
+        "aliases": ["母体产道", "产道"],
+        "note": "母体侧解剖域，目前仅含宫颈管"
+      },
+  
+      "侧脑室": {
+        "type": "Anatomy",
+        "aliases": ["侧脑室"]
+      },
+      "透明隔腔": {
+        "type": "Anatomy",
+        "aliases": ["透明隔腔", "透明隔间腔", "透明隔"]
+      },
+      "后颅窝": {
+        "type": "Anatomy",
+        "aliases": ["后颅窝", "后颅凹"]
+      },
+      "枕大池": {
+        "type": "Anatomy",
+        "aliases": ["枕大池", "颅后窝池", "后颅窝池"]
+      },
+      "胼胝体": {
+        "type": "Anatomy",
+        "aliases": ["胼胝体"]
+      },
+      "小脑": {
+        "type": "Anatomy",
+        "aliases": ["小脑"]
+      },
+      "小脑蚓部": {
+        "type": "Anatomy",
+        "aliases": ["小脑蚓部", "小脑蚓"]
+      },
+      "脉络丛": {
+        "type": "Anatomy",
+        "aliases": ["脉络丛", "脉络膜丛"]
+      },
+      "室管膜下区": {
+        "type": "Anatomy",
+        "aliases": ["室管膜下区", "生发基质区"]
+      },
+      "脑实质": {
+        "type": "Anatomy",
+        "aliases": ["脑实质", "脑白质"]
+      },
+      "脑皮质": {
+        "type": "Anatomy",
+        "aliases": ["脑皮质", "大脑皮质"]
+      },
+      "蛛网膜下腔": {
+        "type": "Anatomy",
+        "aliases": ["蛛网膜下腔"]
+      },
+      "宫颈管": {
+        "type": "Anatomy",
+        "aliases": ["宫颈管", "子宫颈管"]
+      },
+  
+      "侧脑室三角区宽度": {
+        "type": "Measurement",
+        "aliases": ["侧脑室三角区", "侧脑室后角", "脑室三角区", "脑室三角", "侧脑室三角", "侧脑室体后部", "侧脑室"],
+        "unit": "cm",
+        "has_side": true,
+        "template": "{side}{name}宽约{value}cm，超过正常上限{normal_max}cm，考虑{label}"
+      },
+      "透明隔腔宽度": {
+        "type": "Measurement",
+        "aliases": ["透明隔腔宽度", "透明隔间腔", "透明隔腔", "透明隔"],
+        "unit": "cm",
+        "has_side": false,
+        "template": "{name}宽约{value}cm，超过正常上限{normal_max}cm，考虑{label}"
+      },
+      "枕大池深度": {
+        "type": "Measurement",
+        "aliases": ["枕大池深度", "枕大池", "颅后窝池", "后颅窝池"],
+        "unit": "cm",
+        "has_side": false,
+        "template": "{name}深约{value}cm，超过正常上限{normal_max}cm，考虑{label}"
+      },
+      "宫颈管长度": {
+        "type": "Measurement",
+        "aliases": ["宫颈管长度", "宫颈长度", "宫颈管"],
+        "unit": "cm",
+        "has_side": false,
+        "template": "{name}长约{value}cm，低于正常参考下限{normal_min}cm，考虑{label}"
+      },
+      "小脑横径": {
+        "type": "Measurement",
+        "aliases": ["小脑横径", "小脑最大横径", "小脑半球横径"],
+        "unit": "cm",
+        "has_side": false,
+        "note": "需根据孕周判断，留占位",
+        "template": ""
+      },
+  
+      "阈值_1.0cm": {
+        "type": "Threshold",
+        "value": 1.0,
+        "unit": "cm",
+        "label": "1.0cm"
+      },
+      "阈值_2.5cm": {
+        "type": "Threshold",
+        "value": 2.5,
+        "unit": "cm",
+        "label": "2.5cm"
+      },
+  
+      "轻度扩张": { "type": "Severity", "label": "轻度扩张", "range": "1.0–1.2cm" },
+      "中度扩张": { "type": "Severity", "label": "中度扩张", "range": "1.2–1.5cm" },
+      "重度扩张": { "type": "Severity", "label": "重度扩张", "range": "≥1.5cm" },
+      "增宽":     { "type": "Severity", "label": "增宽" },
+      "缩短":     { "type": "Severity", "label": "缩短" },
+  
+      "胼胝体缺如": {
+        "type": "Finding",
+        "aliases": ["胼胝体未见显示", "胼胝体缺如", "胼胝体发育不良", "胼胝体未显示", "胼胝体显示不清"]
+      },
+      "小脑蚓部发育不良": {
+        "type": "Finding",
+        "aliases": ["小脑蚓部发育不良", "小脑蚓部显示欠佳", "小脑蚓部缺如", "小脑蚓部发育欠佳", "小脑蚓部未见显示"]
+      },
+      "蛛网膜囊肿": {
+        "type": "Finding",
+        "aliases": ["蛛网膜囊肿", "蛛网膜下腔囊肿", "蛛网膜下腔囊性灶"]
+      },
+      "脑裂畸形": {
+        "type": "Finding",
+        "aliases": ["脑裂畸形", "裂隙样脑沟", "灰质异位伴脑裂"]
+      },
+      "灰质异位": {
+        "type": "Finding",
+        "aliases": ["灰质异位", "异位灰质", "灰质异位灶"]
+      },
+      "脑实质信号异常": {
+        "type": "Finding",
+        "aliases": ["脑实质信号异常", "脑实质异常信号", "脑白质信号异常", "脑白质异常信号", "脑实质内异常信号"]
+      },
+      "脑积水": {
+        "type": "Finding",
+        "aliases": ["脑积水", "梗阻性脑积水", "交通性脑积水"]
+      },
+      "Dandy-Walker畸形": {
+        "type": "Finding",
+        "aliases": ["Dandy-Walker", "丹迪沃克", "后颅窝囊肿"]
+      },
+      "脉络丛囊肿": {
+        "type": "Finding",
+        "aliases": ["脉络丛囊肿", "脉络膜丛囊肿"]
+      },
+      "室管膜下囊肿": {
+        "type": "Finding",
+        "aliases": ["室管膜下囊肿", "生发基质囊肿"]
+      },
+  
+      "解释_胼胝体发育异常": {
+        "type": "Interpretation",
+        "text": "提示胼胝体发育异常，需结合矢状面形态观察是否伴有脂肪瘤或囊肿"
+      },
+      "解释_小脑蚓部发育异常": {
+        "type": "Interpretation",
+        "text": "提示小脑蚓部发育异常，需结合产前诊断，排除Dandy-Walker畸形或变异"
+      },
+      "解释_蛛网膜囊肿": {
+        "type": "Interpretation",
+        "text": "提示蛛网膜囊肿可能，需随访观察"
+      },
+      "解释_脑皮质发育异常": {
+        "type": "Interpretation",
+        "text": "提示脑皮质发育异常"
+      },
+      "解释_神经元迁移异常": {
+        "type": "Interpretation",
+        "text": "提示神经元迁移异常"
+      },
+      "解释_脑实质病变": {
+        "type": "Interpretation",
+        "text": "提示脑实质病变可能，需结合临床排查宫内感染或缺血缺氧"
+      },
+      "解释_脑积水": {
+        "type": "Interpretation",
+        "text": "提示脑积水，需排查导水管狭窄、生发基质出血或脊柱裂等"
+      },
+      "解释_Dandy-Walker": {
+        "type": "Interpretation",
+        "text": "提示Dandy-Walker畸形或变异，需结合小脑蚓部形态综合评估"
+      },
+      "解释_脉络丛囊肿": {
+        "type": "Interpretation",
+        "text": "提示脉络丛囊肿，多为一过性，建议随访"
+      },
+      "解释_室管膜下囊肿": {
+        "type": "Interpretation",
+        "text": "提示室管膜下囊肿，需排查生发基质出血"
+      }
+    },
+  
+    "triples": [
+  
+      {"s": "产前MRI检查", "p": "covers", "o": "胎儿脑",   "note": "本次检查覆盖的胎儿侧解剖域"},
+      {"s": "产前MRI检查", "p": "covers", "o": "母体产道", "note": "本次检查覆盖的母体侧解剖域"},
+  
+      {"s": "侧脑室",     "p": "part_of", "o": "胎儿脑"},
+      {"s": "透明隔腔",   "p": "part_of", "o": "胎儿脑"},
+      {"s": "后颅窝",     "p": "part_of", "o": "胎儿脑"},
+      {"s": "胼胝体",     "p": "part_of", "o": "胎儿脑"},
+      {"s": "脑实质",     "p": "part_of", "o": "胎儿脑"},
+      {"s": "脑皮质",     "p": "part_of", "o": "胎儿脑"},
+      {"s": "蛛网膜下腔", "p": "part_of", "o": "胎儿脑"},
+  
+      {"s": "枕大池",     "p": "part_of", "o": "后颅窝"},
+      {"s": "小脑",       "p": "part_of", "o": "后颅窝"},
+      {"s": "小脑蚓部",   "p": "part_of", "o": "小脑"},
+      {"s": "脉络丛",     "p": "part_of", "o": "侧脑室"},
+      {"s": "室管膜下区", "p": "part_of", "o": "侧脑室"},
+  
+      {"s": "宫颈管",     "p": "part_of", "o": "母体产道"},
+  
+      {"s": "侧脑室三角区宽度", "p": "measures",        "o": "侧脑室"},
+      {"s": "透明隔腔宽度",     "p": "measures",        "o": "透明隔腔"},
+      {"s": "枕大池深度",       "p": "measures",        "o": "枕大池"},
+      {"s": "宫颈管长度",       "p": "measures",        "o": "宫颈管"},
+      {"s": "小脑横径",         "p": "measures",        "o": "小脑"},
+  
+      {"s": "侧脑室三角区宽度", "p": "has_normal_max",  "o": "阈值_1.0cm"},
+      {"s": "透明隔腔宽度",     "p": "has_normal_max",  "o": "阈值_1.0cm"},
+      {"s": "枕大池深度",       "p": "has_normal_max",  "o": "阈值_1.0cm"},
+      {"s": "宫颈管长度",       "p": "has_normal_min",  "o": "阈值_2.5cm"},
+  
+      {"s": "侧脑室三角区宽度", "p": "has_severity_level", "o": "轻度扩张", "meta": {"min": 1.0, "max": 1.2}},
+      {"s": "侧脑室三角区宽度", "p": "has_severity_level", "o": "中度扩张", "meta": {"min": 1.2, "max": 1.5}},
+      {"s": "侧脑室三角区宽度", "p": "has_severity_level", "o": "重度扩张", "meta": {"min": 1.5, "max": 99.0}},
+      {"s": "透明隔腔宽度",     "p": "has_severity_level", "o": "增宽",     "meta": {"min": 1.0, "max": 99.0}},
+      {"s": "枕大池深度",       "p": "has_severity_level", "o": "增宽",     "meta": {"min": 1.0, "max": 99.0}},
+      {"s": "宫颈管长度",       "p": "has_severity_level", "o": "缩短",     "meta": {"min": 0.0, "max": 2.5}},
+  
+      {"s": "胼胝体缺如",       "p": "located_in",      "o": "胼胝体"},
+      {"s": "胼胝体缺如",       "p": "indicates",       "o": "解释_胼胝体发育异常"},
+  
+      {"s": "小脑蚓部发育不良", "p": "located_in",      "o": "小脑蚓部"},
+      {"s": "小脑蚓部发育不良", "p": "indicates",       "o": "解释_小脑蚓部发育异常"},
+      {"s": "小脑蚓部发育不良", "p": "associated_with", "o": "Dandy-Walker畸形"},
+  
+      {"s": "蛛网膜囊肿",       "p": "located_in",      "o": "蛛网膜下腔"},
+      {"s": "蛛网膜囊肿",       "p": "indicates",       "o": "解释_蛛网膜囊肿"},
+  
+      {"s": "脑裂畸形",         "p": "located_in",      "o": "脑皮质"},
+      {"s": "脑裂畸形",         "p": "indicates",       "o": "解释_脑皮质发育异常"},
+      {"s": "脑裂畸形",         "p": "associated_with", "o": "灰质异位"},
+  
+      {"s": "灰质异位",         "p": "located_in",      "o": "脑皮质"},
+      {"s": "灰质异位",         "p": "indicates",       "o": "解释_神经元迁移异常"},
+  
+      {"s": "脑实质信号异常",   "p": "located_in",      "o": "脑实质"},
+      {"s": "脑实质信号异常",   "p": "indicates",       "o": "解释_脑实质病变"},
+  
+      {"s": "脑积水",           "p": "located_in",      "o": "侧脑室"},
+      {"s": "脑积水",           "p": "indicates",       "o": "解释_脑积水"},
+      {"s": "脑积水",           "p": "associated_with", "o": "侧脑室三角区宽度"},
+  
+      {"s": "Dandy-Walker畸形", "p": "located_in",      "o": "后颅窝"},
+      {"s": "Dandy-Walker畸形", "p": "indicates",       "o": "解释_Dandy-Walker"},
+      {"s": "Dandy-Walker畸形", "p": "associated_with", "o": "小脑蚓部发育不良"},
+  
+      {"s": "脉络丛囊肿",       "p": "located_in",      "o": "脉络丛"},
+      {"s": "脉络丛囊肿",       "p": "indicates",       "o": "解释_脉络丛囊肿"},
+  
+      {"s": "室管膜下囊肿",     "p": "located_in",      "o": "室管膜下区"},
+      {"s": "室管膜下囊肿",     "p": "indicates",       "o": "解释_室管膜下囊肿"}
+    ]
+  }

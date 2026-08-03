@@ -1,0 +1,56 @@
+{
+  "fetal_mri_diagnosis": {
+    "file_name": "InDistribution_train.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "system": "system"
+    }
+  },
+  "InDistribution_test": {
+    "file_name": "InDistribution_test.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "system": "system"
+    }
+  },
+  "OutofDistribution_center1_normal": {
+    "file_name": "OutofDistribution_center1_normal.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "system": "system"
+    }
+  },
+  "OutofDistribution_center1_patients": {
+    "file_name": "OutofDistribution_center1_patients.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "system": "system"
+    }
+  },
+  "OutofDistribution_center2_normal": {
+    "file_name": "OutofDistribution_center2_normal.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "system": "system"
+    }
+  },
+  "OutofDistribution_center2_patients": {
+    "file_name": "OutofDistribution_center2_patients.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "system": "system"
+    }
+  }
+}
