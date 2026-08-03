@@ -1,186 +1,179 @@
-# KG-Enhanced LLM for Fetal Brain MRI Diagnosis with Domain Adaptation
+# FetalScribe: Fetal Brain MRI Report Generation
 
-This repository provides the implementation for our paper on leveraging Large Language Models (LLMs) enhanced with clinical Knowledge Graphs (KG) and Domain-Adaptive Pre-Training (DAPT) for automated fetal brain MRI diagnostic report generation.
+This repository contains the training, knowledge-graph augmentation, domain-adaptive pre-training, inference, and evaluation code used for fetal brain MRI diagnostic report generation.
 
-## Overview
+The base model is [DeepSeek-R1-0528-Qwen3-8B](https://huggingface.co/deepseek-ai/DeepSeek-R1-0528-Qwen3-8B). The released model files are parameter-efficient LoRA adapters and must be loaded together with the base model.
 
-Automated generation of fetal brain MRI diagnostic reports is challenging due to the complexity of clinical findings, the need for domain-specific knowledge, and the distribution shift across different medical centers. We propose a three-stage framework built upon DeepSeek-R1-Qwen3-8B:
+![Method overview](fig1.jpg)
 
-1. **Direct Supervised Fine-Tuning (SFT)**: LoRA-based fine-tuning on in-distribution diagnostic data as the baseline.
-2. **Knowledge Graph-Enhanced Fine-Tuning**: A clinical KG retrieval module that augments training inputs with structured medical knowledge (measurement thresholds, finding interpretations, differential diagnoses).
-3. **Domain-Adaptive Pre-Training (DAPT)**: Unsupervised continual pre-training on unlabeled out-of-distribution (OoD) target-domain text with experience replay, improving cross-center generalization.
+## Repository layout
 
-![Method Overview](fig1.jpg)
-
-## Key Innovations
-
-- **Clinical Knowledge Graph with Dual-Path Retrieval**: A domain-specific KG for fetal brain MRI that combines (A) numeric rule-based extraction with threshold grading for quantitative measurements (e.g., lateral ventricle width), and (B) concept-level graph traversal for qualitative findings (e.g., corpus callosum agenesis), providing structured clinical references to guide LLM reasoning.
-
-- **KG-Augmented Training Paradigm**: Instead of modifying the model architecture, we augment the training input with retrieved KG context at the data level, enabling the model to learn the association between imaging findings and clinical knowledge without additional inference overhead.
-
-- **DAPT with Experience Replay for OoD Generalization**: A lightweight domain adaptation strategy that performs continual pre-training on unlabeled target-domain reports (input field only, preserving the unsupervised setting) with a small proportion of source-domain replay to mitigate catastrophic forgetting.
-
-- **Multi-Dimensional Evaluation Framework**: Combining NLP metrics (ROUGE-L, BERTScore, Sentence Similarity) with LLM-as-judge evaluation (keyword extraction + TP/FP/FN comparison) for comprehensive and clinically meaningful assessment.
-
-## Repository Structure
-
-```
+```text
 .
-├── README.md
-├── requirements.txt
-├── fig1.jpg
-├── direct_finetuning/          # Stage 1: Direct SFT
-│   ├── train.yaml              # LLaMA-Factory training config
-│   ├── predict.yaml            # LLaMA-Factory inference config
-│   └── dataset_info.json       # Dataset registration for LLaMA-Factory
-├── kg_enhanced_finetuning/     # Stage 2: KG-Enhanced SFT
-│   ├── configs/
-│   │   ├── train_kg.yaml       # Training config (KG-augmented data)
-│   │   └── predict_kg.yaml     # Inference config
-│   └── kg_rag/                 # KG retrieval module
-│       ├── __init__.py
-│       ├── clinical_kg.json    # Clinical Knowledge Graph (entities + triples)
-│       ├── kg_loader.py        # KG loader with index construction
-│       ├── preprocessor.py     # Text normalization and sentence splitting
-│       ├── numeric_extractor.py # Path A: Numeric measurement extraction & threshold grading
-│       ├── graph_retriever.py  # Path B: Concept matching & knowledge traversal
-│       ├── verbalizer.py       # Natural language generation from structured results
-│       ├── context_builder.py  # Top-level orchestration (Path A + B)
-│       ├── dataset_builder.py  # Augmented dataset construction
-│       ├── coverage_stats.py   # KG coverage statistics
-│       └── run_build.py        # Entry script for dataset building
-└── dapt/                       # Stage 3: Domain-Adaptive Pre-Training
-    ├── configs/
-    │   ├── v1_center1_dapt.yaml      # DAPT config: direct SFT + center1
-    │   ├── v1_center2_dapt.yaml      # DAPT config: direct SFT + center2
-    │   ├── v2_kg_center1_dapt.yaml   # DAPT config: KG-enhanced + center1
-    │   └── v2_kg_center2_dapt.yaml   # DAPT config: KG-enhanced + center2
-    └── scripts/
-        ├── step0_extract_ood_text.py           # Extract unlabeled OoD text
-        ├── step1_build_pt_corpus.py            # Build DAPT corpus (with optional replay)
-        ├── step2_train_dapt.bash               # Batch DAPT training
-        ├── step3_predict.bash                  # Batch prediction (SFT-only / SFT+DAPT)
-        ├── step4_postprocess.bash              # Full evaluation pipeline
-        ├── step4-1_text_extract_and_clean.py   # Post-processing: text extraction & cleaning
-        ├── step4-2_evaluate_output_with_metrics.py  # NLP metrics (ROUGE-L, BERTScore, SentSim)
-        ├── step4-3_evaluate_outputs_with_llm_part1.py  # LLM keyword extraction
-        ├── step4-3_evaluate_outputs_with_llm_part2.py  # LLM TP/FP/FN comparison
-        └── step4-4_get_statistics_with_metrics.py      # Aggregate statistics
+|-- data_examples/
+|   `-- example_dataset.json
+|-- Finetuning/
+|   |-- configs/
+|   |-- data/dataset_info.json
+|   `-- adapter/fetal_mri_lora/
+|-- Finetuning_KG/
+|   |-- configs/
+|   |-- data/dataset_info.json
+|   |-- kg_rag/
+|   |-- table/
+|   |-- tests/
+|   `-- adapter/fetal_mri_plus_kg_lora_v3/
+|-- Finetuning_DAPT/
+|   |-- configs/
+|   |-- scripts/
+|   `-- adapters/
+|       |-- direct/{center1,center2}/
+|       `-- kg/{center1,center2}/
+`-- evaluation/
 ```
 
-## Requirements
+Patient reports are private and are not included. `data_examples/example_dataset.json` contains one fully synthetic record that documents the expected schema.
 
-- Python >= 3.10
-- CUDA >= 11.8
-- GPU: NVIDIA A100/H100 (40GB+ VRAM recommended)
+## Installation
 
-Install dependencies:
+The experiments used the `lyj_llamafactory` environment with Python 3.12.13, PyTorch 2.5.1+cu121, Transformers 5.2.0, PEFT 0.18.1, and LLaMA-Factory 0.9.5.dev0. Install the CUDA 12.1 PyTorch build, this repository's dependencies, and the exact LLaMA-Factory revision:
 
 ```bash
+pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cu121
 pip install -r requirements.txt
-```
-
-The training and inference pipeline is built on [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory). Please install it following the official instructions:
-
-```bash
 git clone https://github.com/hiyouga/LLaMA-Factory.git
 cd LLaMA-Factory
+git checkout 833f6027b17a5502664371f901827844b9fad6fa
 pip install -e ".[torch,metrics]"
 ```
 
-Base model: [DeepSeek-R1-0528-Qwen3-8B](https://huggingface.co/deepseek-ai/DeepSeek-R1-0528-Qwen3-8B)
+All commands below are run from the repository root unless stated otherwise. Private datasets must use the four fields shown in `data_examples/example_dataset.json`: `instruction`, `input`, `output`, and `system`.
 
-## Data Privacy
+## 1. Direct supervised fine-tuning
 
-Due to patient privacy and institutional data regulations, the training and evaluation datasets (fetal brain MRI diagnostic reports) cannot be publicly released. We provide:
-- All training/inference configuration files
-- The clinical knowledge graph (`kg_rag/clinical_kg.json`)
-- Complete code for data processing, model training, inference, and evaluation
-
-Users can apply the same pipeline to their own institutional data by following the data format specified in `dataset_info.json`.
-
-## Usage
-
-### Stage 1: Direct Supervised Fine-Tuning
+Place the private JSON files referenced by `Finetuning/data/dataset_info.json` in `Finetuning/data/`.
 
 ```bash
-cd direct_finetuning
-
-# Prepare your dataset in LLaMA-Factory format and register in dataset_info.json
-# Each sample: {"instruction": "...", "input": "<report>", "output": "<diagnosis>", "system": "..."}
-
-# Training
-CUDA_VISIBLE_DEVICES=0 llamafactory-cli train train.yaml
-
-# Inference
-CUDA_VISIBLE_DEVICES=0 llamafactory-cli train predict.yaml
+cd Finetuning
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train configs/train.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train configs/predict.yaml
 ```
 
-### Stage 2: KG-Enhanced Fine-Tuning
+The released direct-SFT adapter is in `Finetuning/adapter/fetal_mri_lora/`.
+
+## 2. Knowledge-graph augmented fine-tuning
+
+The KG pipeline has two retrieval paths:
+
+1. Numeric measurements are extracted at clause level, normalized to centimeters, paired with the correct anatomy and laterality, and graded using KG thresholds.
+2. Qualitative findings are matched through aliases with local negation filtering, followed by typed graph traversal through `Indicates` and `AssocWith` relations.
+
+The retrieved evidence is verbalized and appended to the report under `Clinical Knowledge Reference`. The model architecture is unchanged, but KG retrieval and context construction are required during both training and inference.
+
+Build a KG-augmented JSON file:
 
 ```bash
-cd kg_enhanced_finetuning
+python -m Finetuning_KG.kg_rag.run_build \
+  --input-path ./private_data/input.json \
+  --output-path ./private_data/augmented.json \
+  --kg-path Finetuning_KG/kg_rag/clinical_kg.json \
+  --stats
+```
 
-# Step 1: Build KG-augmented training data
-python kg_rag/run_build.py \
-    --input_path /path/to/InDistribution_train.json \
-    --output_path ./data/InDistribution_train_with_kg.json \
-    --kg_path kg_rag/clinical_kg.json \
-    --stats
+Place the augmented private files referenced by `Finetuning_KG/data/dataset_info.json` in `Finetuning_KG/data/`, then run:
 
-# Step 2: Register augmented dataset in data/dataset_info.json, then train
+```bash
+cd Finetuning_KG
 CUDA_VISIBLE_DEVICES=0 llamafactory-cli train configs/train_kg.yaml
-
-# Step 3: Inference
 CUDA_VISIBLE_DEVICES=0 llamafactory-cli train configs/predict_kg.yaml
 ```
 
-### Stage 3: Domain-Adaptive Pre-Training (DAPT)
+`Finetuning_KG/table/` contains bilingual entity tables and reproducible table-generation scripts. The regression tests use synthetic sentences only:
 
 ```bash
-cd dapt
+python Finetuning_KG/table/generate_entity_tables.py \
+  --kg-path Finetuning_KG/kg_rag/clinical_kg.json \
+  --language cn
 
-# Step 0: Extract unlabeled text from OoD datasets (input field only)
-python scripts/step0_extract_ood_text.py \
-    --dataset_dir /path/to/dataset \
-    --output_dir ./data
+python Finetuning_KG/table/generate_entity_tables.py \
+  --kg-path Finetuning_KG/table/clinical_kg_en.json \
+  --language en
 
-# Step 1: Build DAPT pre-training corpus
-python scripts/step1_build_pt_corpus.py --data_dir ./data
-# For ablation with replay:
-python scripts/step1_build_pt_corpus.py --data_dir ./data --replay 0.006
-
-# Step 2: Run DAPT training
-CUDA_VISIBLE_DEVICES=0 bash scripts/step2_train_dapt.bash
-
-# Step 3: Prediction (SFT-only and SFT+DAPT modes)
-CUDA_VISIBLE_DEVICES=0 bash scripts/step3_predict.bash all all
-
-# Step 4: Evaluation pipeline
-CUDA_VISIBLE_DEVICES=0 bash scripts/step4_postprocess.bash
+python -m unittest Finetuning_KG.tests.test_kg_rag
 ```
 
-### Evaluation
+## 3. Domain-adaptive pre-training
 
-The evaluation pipeline (`step4_postprocess.bash`) runs four stages:
-1. **Text extraction & cleaning**: Extract predictions, remove think tags, normalize text
-2. **NLP metrics**: ROUGE-L (Chinese), BERTScore, Sentence Similarity
-3. **LLM-based evaluation**: Keyword extraction and TP/FP/FN comparison using GPT-4o
-4. **Statistics aggregation**: Generate per-dataset and per-center comparison tables
+DAPT uses only the unlabeled `input` field from each target center. A small source-domain replay sample is mixed into the target corpus to reduce catastrophic forgetting. A separate DAPT adapter is trained for each center and each SFT branch.
 
-Set `OPENAI_API_KEY` and `OPENAI_BASE_URL` environment variables for LLM-based evaluation.
+```bash
+python Finetuning_DAPT/scripts/01_extract_unlabeled_text.py \
+  --dataset-dir ./private_data \
+  --output-dir Finetuning_DAPT/data
+
+python Finetuning_DAPT/scripts/02_build_dapt_corpus.py \
+  --data-dir Finetuning_DAPT/data \
+  --replay 0.006
+
+bash Finetuning_DAPT/scripts/03_train_dapt.sh all
+bash Finetuning_DAPT/scripts/04_predict.sh all all
+```
+
+The loading chain is:
+
+```text
+base model + matching SFT adapter + center-specific DAPT adapter
+```
+
+For example, center-1 KG+DAPT inference loads:
+
+```text
+DeepSeek-R1-0528-Qwen3-8B
+  + Finetuning_KG/adapter/fetal_mri_plus_kg_lora_v3
+  + Finetuning_DAPT/adapters/kg/center1
+```
+
+The four DAPT adapters correspond to direct SFT and KG-augmented SFT for centers 1 and 2. A DAPT adapter is not a standalone model.
+
+## Adapter files and reproducibility
+
+Each released adapter directory contains:
+
+- `adapter_model.safetensors`: learned LoRA parameters.
+- `adapter_config.json`: LoRA architecture, target modules, rank, scaling, dropout, and base-model metadata.
+
+These two files are sufficient to load an adapter for inference. Reproducing training additionally requires the base model, private training data, the corresponding YAML configuration, preprocessing code, software environment, and random seed. Optimizer states, scheduler states, trainer logs, and intermediate checkpoints are not required for inference and are intentionally excluded.
+
+## Evaluation
+
+The evaluation pipeline contains:
+
+1. Prediction extraction and text cleaning.
+2. ROUGE-L, BERTScore, and sentence-similarity computation.
+3. GPT-5.2 clinical-keyword extraction.
+4. GPT-5.2 semantic matching and TP/FP/FN counting.
+5. Bootstrap confidence intervals and paired significance tests.
+
+The statistical analysis uses 1,000 bootstrap resamples, one-sided paired Wilcoxon signed-rank tests for NLP metrics, and 10,000 paired permutations for clinical metrics.
+
+Set API credentials through environment variables. Never place credentials in source files:
+
+```bash
+export OPENAI_API_KEY="your-api-key"
+export OPENAI_BASE_URL="https://api.openai.com/v1"
+export EVAL_MODEL="gpt-5.2"
+```
+
+The evaluation scripts use relative result roots that can be overridden with `PREDICTIONS_ROOT`, `CLEANED_ROOT`, `SCORES_ROOT`, `LLM_ROOT`, and `METRICS_ROOT`. The expected files and exact execution order are documented in `evaluation/README.md`.
+
+## Data privacy
+
+The fetal MRI reports cannot be released because of patient privacy and institutional restrictions. No patient data, generated patient reports, API credentials, local absolute paths, optimizer states, or caches are included in this repository.
 
 ## Citation
 
-```bibtex
-@article{,
-  title={},
-  author={},
-  journal={},
-  year={}
-}
-```
+Citation metadata will be added after publication.
 
 ## License
 
-This project is for research purposes only. The clinical knowledge graph and evaluation prompts are designed specifically for fetal brain MRI diagnosis.
+The code and released research artifacts are provided for non-commercial academic research. See `LICENSE`.
